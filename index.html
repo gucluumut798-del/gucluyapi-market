@@ -1010,9 +1010,11 @@ Yorumu Sil
       if (rs) rs.innerText = count ? (avg.toFixed(1) + " / 5 ⭐") : "Henüz puan yok";
       if (rc) rc.innerText = count ? (count + " yorum") : "";
     }
+    function generateStars(rating) {
+  return "⭐".repeat(rating || 0);
+}
 
     loadReviews();
-  </script>
   </script>
 
 
