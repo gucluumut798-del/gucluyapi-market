@@ -1325,6 +1325,21 @@ window.replyReview = async function(reviewId) {
   loadReviews();
 };
 </script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC27AifURLUgesVrR5K3Prz8a0rwIKdA34",
+  authDomain: "guclu-yapi-af539.firebaseapp.com",
+  projectId: "guclu-yapi-af539",
+  storageBucket: "guclu-yapi-af539.firebasestorage.app",
+  messagingSenderId: "33090753604",
+  appId: "1:33090753604:web:a0a1fb8b0f98ea24561811"
+};
 
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+</script>
 </body>
 </html>
