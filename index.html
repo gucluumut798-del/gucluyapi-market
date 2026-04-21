@@ -994,24 +994,14 @@ nav a:hover{
       }
 
       try{
-        let photoData = "";
+        
 
-        if(photo){
-          photoData = await new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = e => resolve(e.target.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(photo);
-          });
-        }
-
-        await db.collection("reviews").add({
-          name,
-          comment,
-          rating,
-          photo: photoData,
-          date: new Date().toLocaleDateString("tr-TR")
-        });
+       await db.collection("reviews").add({
+        name: name,
+        comment: comment,
+        rating: rating,
+        createdAt: new Date()
+       });
 
         if (message){
           message.style.color = "green";
