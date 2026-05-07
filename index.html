@@ -9,7 +9,7 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'AW-17964334460');
 </script>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8" /
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GÜÇLÜ YAPI | İzmir Menemen Mantolama - Boya - İnşaat</title>
   <meta name="description" content="GÜÇLÜ YAPI: İzmir ve Menemen’de mantolama, dış cephe boya, iç cephe boya ve tadilat hizmetleri. Ücretsiz keşif ve hızlı teklif." />
@@ -714,20 +714,20 @@ nav a:hover{
 
   <div class="gallery">
 
- <img src="1.jpg" alt="" class="gallery-img">
-<img src="2.jpg" alt="" class="gallery-img">
-<img src="3.jpg" alt="" class="gallery-img">
-<img src="4.jpg" alt="" class="gallery-img">
-<img src="5.jpg" alt="" class="gallery-img">
-<img src="6.jpg" alt="" class="gallery-img">
-<img src="7.jpg" alt="" class="gallery-img">
-<img src="8.jpg" alt="" class="gallery-img">
-<img src="9.jpg" alt="" class="gallery-img">
-<img src="20.jpg" alt="" class="gallery-img">
-<img src="14.jpg" alt="" class="gallery-img">
-<img src="15.jpg" alt="" class="gallery-img">
-<img src="16.jpg" alt="" class="gallery-img">
-<img src="18.jpg" alt="" class="gallery-img">
+ <img src="1.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="2.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="3.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="4.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="5.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="6.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="7.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="8.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="9.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="20.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="14.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="15.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="16.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
+<img src="18.jpg" alt="" class="gallery-img" onclick="openImageModal(this.src)">
      
 
   </div>
@@ -1357,20 +1357,31 @@ function closeImageModal() {
   });
 })();
 </script>
- <div id="imageModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
+
+<div id="imageModal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
   <span onclick="closeImageModal()" style="position:absolute;top:20px;right:30px;font-size:40px;color:white;cursor:pointer;">&times;</span>
   <img id="modalImage" src="" style="max-width:90%;max-height:90%;border-radius:12px;box-shadow:0 0 20px rgba(0,0,0,0.4);">
 </div>
-<script>
+
 <script>
 fetch("https://api.countapi.xyz/hit/gucluyapimarket/ziyaret")
 .then(res => res.json())
 .then(data => {
-document.getElementById("visitCount").innerText = data.value;
+  document.getElementById("visitCount").innerText = data.value;
 })
 .catch(() => {
-document.getElementById("visitCount").innerText = "0";
+  document.getElementById("visitCount").innerText = "0";
 });
+
+function openImageModal(src) {
+  document.getElementById("imageModal").style.display = "flex";
+  document.getElementById("modalImage").src = src;
+}
+
+function closeImageModal() {
+  document.getElementById("imageModal").style.display = "none";
+}
+</script>
 <script>
 window.replyReview = async function(reviewId) {
   const textarea = document.getElementById(`reply-${reviewId}`);
