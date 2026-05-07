@@ -1364,14 +1364,7 @@ function closeImageModal() {
 </div>
 
 <script>
-fetch("https://api.countapi.xyz/hit/gucluyapimarket/ziyaret")
-.then(res => res.json())
-.then(data => {
-  document.getElementById("visitCount").innerText = data.value;
-})
-.catch(() => {
-  document.getElementById("visitCount").innerText = "0";
-});
+
 
 function openImageModal(src) {
   document.getElementById("imageModal").style.display = "flex";
