@@ -581,6 +581,42 @@
     .contact-card h3{margin:0 0 10px;font-size:24px}
     .contact-card a{font-weight:1000;color:#111}
     .contact-card a:hover{color:var(--green)}
+    .offer-wrap{display:grid;grid-template-columns:1.02fr 1.18fr;gap:24px;align-items:start;margin-top:26px}
+    .offer-side{display:grid;gap:18px}
+    .offer-hero-card{position:relative;overflow:hidden;background:linear-gradient(180deg,#0b0f18 0%,#151b2b 100%);color:#fff;border-radius:30px;padding:28px;border:1px solid rgba(255,255,255,.06);box-shadow:0 22px 60px rgba(0,0,0,.16)}
+    .offer-hero-card::before{content:"";position:absolute;inset:auto -45px -45px auto;width:170px;height:170px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,48,.36),rgba(244,196,48,.08) 62%,transparent 64%)}
+    .offer-hero-card::after{content:"";position:absolute;left:-50px;top:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.08),transparent 70%)}
+    .offer-kicker{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(244,196,48,.12);border:1px solid rgba(244,196,48,.22);color:#ffe08a;font-weight:900;font-size:12px;letter-spacing:.3px;text-transform:uppercase}
+    .offer-hero-card h3{margin:16px 0 12px;font-size:34px;line-height:1.08}
+    .offer-hero-card p{margin:0;color:rgba(255,255,255,.83);line-height:1.7}
+    .offer-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+    .offer-badge{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);font-weight:800;font-size:13px;color:#fff}
+    .offer-process{background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:28px;padding:24px;box-shadow:0 18px 48px rgba(0,0,0,.08)}
+    .offer-process h4{margin:0 0 14px;font-size:24px}
+    .offer-steps{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+    .offer-steps li{display:grid;grid-template-columns:42px 1fr;gap:14px;align-items:start;padding:14px;border-radius:20px;background:linear-gradient(180deg,#fff 0%,#fafaf7 100%);border:1px solid rgba(0,0,0,.05)}
+    .offer-step-no{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold),#ffe08a);color:#111;font-weight:1000;box-shadow:0 12px 26px rgba(244,196,48,.28)}
+    .offer-step-title{display:block;font-size:17px;font-weight:900;color:#111;margin-bottom:3px}
+    .offer-step-desc{display:block;color:#667085;line-height:1.55}
+    .offer-mini-contacts{display:grid;grid-template-columns:1fr;gap:12px}
+    .offer-mini-contact{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border:1px solid rgba(0,0,0,.06);border-radius:22px;padding:16px 18px;box-shadow:0 14px 36px rgba(0,0,0,.06)}
+    .offer-mini-contact strong{display:block;font-size:16px;color:#111}
+    .offer-mini-contact span{display:block;font-size:13px;color:#667085;margin-top:3px}
+    .offer-mini-contact a{text-decoration:none;white-space:nowrap;font-weight:1000;color:#111;background:linear-gradient(135deg,#f4c430,#ffe08a);border:1px solid rgba(0,0,0,.06);padding:10px 14px;border-radius:999px;box-shadow:0 10px 24px rgba(244,196,48,.26)}
+    .offer-form{max-width:none;margin:0;background:linear-gradient(180deg,#fff 0%,#fcfbf7 100%);border-radius:30px;padding:26px;border:1px solid rgba(0,0,0,.06);box-shadow:0 22px 58px rgba(0,0,0,.09);position:relative;overflow:hidden}
+    .offer-form::before{content:"";position:absolute;right:-50px;top:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(244,196,48,.18),rgba(244,196,48,.05) 58%,transparent 60%)}
+    .offer-form-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:16px;border-bottom:1px dashed rgba(0,0,0,.12)}
+    .offer-form-top h3{margin:0;font-size:30px;text-align:left}
+    .offer-form-top p{margin:4px 0 0;color:#667085;line-height:1.55}
+    .offer-top-pill{padding:10px 14px;border-radius:999px;background:#111;color:#fff;font-weight:900;font-size:12px;letter-spacing:.2px;white-space:nowrap}
+    .offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .offer-field{display:flex;flex-direction:column;gap:8px}
+    .offer-field label{font-size:13px;font-weight:900;color:#444;letter-spacing:.2px}
+    .offer-field.full{grid-column:1/-1}
+    .offer-form input,.offer-form textarea,.offer-form select{margin:0;background:#fff}
+    .offer-btns{display:grid;grid-template-columns:1.05fr .95fr;gap:12px;margin-top:16px}
+    .offer-form .btn{width:100%;margin-top:0;display:flex;align-items:center;justify-content:center;min-height:56px;font-size:16px}
+    .offer-note{margin-top:12px;text-align:center;color:#6b7280;font-size:13px;line-height:1.6}
     .map{border:10px solid #fff;border-radius:34px;overflow:hidden;box-shadow:0 25px 75px rgba(0,0,0,.18)}
     .map iframe{width:100%;height:380px;border:0;display:block}
 
@@ -2326,6 +2362,21 @@ html{scroll-behavior:smooth}
 .quote-pdf-note{margin-top:10px;padding:12px 14px;border-radius:14px;border:1px solid rgba(244,196,48,.20);background:rgba(244,196,48,.06);color:#b9bcc4;font-size:12px;line-height:1.5}
 @media(max-width:700px){.quote-service-full{grid-column:auto}.quote-service-full select{font-size:13px}.quote-pdf-note{font-size:11px}}
 
+
+    @media (max-width: 980px){
+      .offer-wrap{grid-template-columns:1fr}
+    }
+    @media (max-width: 640px){
+      .offer-grid,.offer-btns{grid-template-columns:1fr}
+      .offer-form-top{flex-direction:column;align-items:flex-start}
+      .offer-form-top h3{font-size:28px}
+      .offer-hero-card h3{font-size:28px}
+      .offer-mini-contact{flex-direction:column;align-items:flex-start}
+      .offer-mini-contact a{width:100%;text-align:center}
+      .offer-steps li{grid-template-columns:38px 1fr}
+      .offer-step-no{width:38px;height:38px}
+    }
+
 </style>
 
 <style id="gy-ultra-premium-2026">
@@ -3365,27 +3416,62 @@ header .nav{align-items:center}
 <section class="reveal" id="teklifal">
 <div class="card"><div class="pad">
 <div class="section-head">
-<div class="eyebrow">HIZLI TEKLİF</div>
-<h2 class="title">Ücretsiz keşif ve teklif alın.</h2>
-<p class="lead">Bilgilerinizi bırakın; talebinizi WhatsApp üzerinden bize iletin. Keşif ve teklif için sizinle iletişime geçelim.</p>
+<div class="eyebrow">HIZLI TEKLİF VE KEŞİF</div>
+<h2 class="title">Binanız için ücretsiz keşif planlayalım.</h2>
+<p class="lead">Kısa bilgilerinizi bırakın; uygulama ihtiyacınıza göre sizi arayalım, uygun sistemi belirleyelim ve yazılı teklifinizi hazırlayalım.</p>
 </div>
-<div class="form">
+<div class="offer-wrap">
+<div class="offer-side">
+<div class="offer-hero-card">
+<div class="offer-kicker">★ Hızlı Dönüş • Ücretsiz Keşif</div>
+<h3>Doğru sistemi seçelim, teklifinizi profesyonelce hazırlayalım.</h3>
+<p>Dış cephe boya, fileli sıva, dekoratif sıva, mantolama, izolasyon ve tadilat ihtiyaçlarınız için önce yapıyı analiz ediyor; ardından size en uygun uygulama sistemini netleştiriyoruz.</p>
+<div class="offer-badges">
+<span class="offer-badge">Yerinde keşif planlaması</span>
+<span class="offer-badge">Uygun sistem önerisi</span>
+<span class="offer-badge">Yazılı teklif hazırlığı</span>
+</div>
+</div>
+<div class="offer-process">
+<h4>Nasıl ilerliyoruz?</h4>
+<ul class="offer-steps">
+<li><span class="offer-step-no">1</span><div><span class="offer-step-title">Bilgilerinizi gönderin</span><span class="offer-step-desc">İşin türünü, konumunu ve kısa notunuzu bize iletin.</span></div></li>
+<li><span class="offer-step-no">2</span><div><span class="offer-step-title">Size dönüş yapalım</span><span class="offer-step-desc">Ekibimiz kısa sürede sizinle iletişime geçsin.</span></div></li>
+<li><span class="offer-step-no">3</span><div><span class="offer-step-title">Keşif ve sistem belirleme</span><span class="offer-step-desc">Yüzeye uygun boya, sıva veya izolasyon sistemini netleştirelim.</span></div></li>
+<li><span class="offer-step-no">4</span><div><span class="offer-step-title">Teklifi hazırlayalım</span><span class="offer-step-desc">Detaylı fiyatlandırma ve uygulama planını paylaşalım.</span></div></li>
+</ul>
+</div>
+
+</div>
+<div class="form offer-form">
+<div class="offer-form-top">
+<div>
 <h3>Teklif Formu</h3>
-<input id="offerName" placeholder="Ad Soyad" type="text"/>
-<input id="offerPhone" placeholder="Telefon (örn: 05xx xxx xx xx)" type="tel"/>
-<select id="offerService">
+<p>Bilgilerinizi bırakın; ekibimiz sizinle iletişime geçerek keşif ve teklif sürecini başlatsın.</p>
+</div>
+<div class="offer-top-pill">AYNI GÜN GERİ DÖNÜŞ</div>
+</div>
+<div class="offer-grid">
+<div class="offer-field"><label for="offerName">Ad Soyad</label><input id="offerName" placeholder="Ad Soyad" type="text"/></div>
+<div class="offer-field"><label for="offerPhone">Telefon</label><input id="offerPhone" placeholder="Telefon (örn: 05xx xxx xx xx)" type="tel"/></div>
+<div class="offer-field"><label for="offerService">Hizmet türü</label><select id="offerService">
 <option value="Dış Cephe Boya">Dış Cephe Boya</option>
 <option value="Mantolama (Isı Yalıtım)">Mantolama (Isı Yalıtım)</option>
-<option value="Fileli Sıva ve Dekoratif Sıva">Fileli Sıva ve Dekoratif Sıva</option>
+<option value="Fileli Sıva + Dekoratif Sıva + Boya">Fileli Sıva + Dekoratif Sıva + Boya</option>
 <option value="İç Cephe Boya">İç Cephe Boya</option>
 <option value="İzolasyon">İzolasyon</option>
 <option value="Tadilat &amp; Tamirat">Tadilat &amp; Tamirat</option>
-</select>
-<input id="offerLocation" placeholder="Adres / Mahalle (Menemen vb.)" type="text"/>
-<textarea id="offerNote" placeholder="Kısa açıklama (m², kat sayısı, yapılacak iş...)" rows="4"></textarea>
+</select></div>
+<div class="offer-field"><label for="offerLocation">Konum</label><input id="offerLocation" placeholder="Adres / Mahalle (Menemen, Karşıyaka vb.)" type="text"/></div>
+<div class="offer-field full"><label for="offerNote">Kısa açıklama</label><textarea id="offerNote" placeholder="Yaklaşık m², kat sayısı, mevcut yüzey durumu ve yapılacak işi kısaca yazın..." rows="5"></textarea></div>
+</div>
+<div class="offer-btns">
 <button class="btn btn-green" onclick="openOfferModal()">WhatsApp'tan Teklif Gönder</button>
 <button class="btn btn-dark" onclick="createOfferPDF()">PDF Teklif Oluştur</button>
+</div>
+<p class="offer-note">Formu gönderdikten sonra ekibimiz sizinle iletişime geçerek keşif ve teklif sürecini başlatır.</p>
 <p id="offerMsg" style="text-align:center;font-weight:bold"></p>
+</div>
 </div>
 </div></div>
 </section>
