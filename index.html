@@ -4766,7 +4766,91 @@ Net keşif ve teklif için dönüş yapabilir misiniz?`;
 <script id="gy-trust-anim-v7">
 (function(){const items=[...document.querySelectorAll('.reveal-trust')];if(!items.length)return;if(!('IntersectionObserver'in window)){items.forEach(x=>x.classList.add('is-visible'));return;}const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=items.indexOf(e.target);setTimeout(()=>e.target.classList.add('is-visible'),Math.max(0,i)*90);io.unobserve(e.target);}}),{threshold:.18});items.forEach(x=>io.observe(x));})();
 </script>
+  <!-- GÜÇLÜ YAPI WhatsApp + Akıllı Kontrol -->
+<script>
+(function () {
+  "use strict";
+
+  /* WhatsApp dönüşümü */
+  document.addEventListener("click", function (event) {
+    var link = event.target.closest("a[href]");
+    if (!link) return;
+
+    var href = (link.getAttribute("href") || "").toLowerCase();
+
+    var whatsapp =
+      href.includes("wa.me") ||
+      href.includes("api.whatsapp.com") ||
+      href.includes("web.whatsapp.com") ||
+      href.startsWith("whatsapp:");
+
+    if (!whatsapp) return;
+
+    if (typeof window.gtag === "function") {
+      window.gtag("event", "ads_conversion_contact", {
+        contact_method: "whatsapp",
+        link_url: link.href
+      });
+
+      console.log("✅ WhatsApp dönüşümü gönderildi");
+    }
+  }, true);
 
 
-\n<!-- GÜÇLÜ YAPI WhatsApp conversion + Akıllı Kontrol V3 -->\n<script id="gy-whatsapp-conversion-v3">\n(function(){\n  'use strict';\n  window.gyTrackWhatsapp = function(linkUrl){\n    if (typeof window.gtag !== 'function') return false;\n    window.gtag('event','ads_conversion_contact',{\n      contact_method:'whatsapp',\n      link_url:linkUrl || '',\n      transport_type:'beacon'\n    });\n    return true;\n  };\n  document.addEventListener('click',function(event){\n    var link=event.target.closest ? event.target.closest('a[href]') : null;\n    if(!link) return;\n    var href=(link.getAttribute('href')||'').toLowerCase();\n    if(href.indexOf('wa.me/')!==-1 || href.indexOf('api.whatsapp.com/')!==-1 || href.indexOf('web.whatsapp.com/')!==-1 || href.indexOf('whatsapp:')===0){\n      window.gyTrackWhatsapp(link.href||href);\n    }\n  },true);\n})();\n</script>\n<script id="gy-ai-diagnostic-v3">\n(function(){\n  'use strict';\n  if(!/[?&]kontrol=1(?:&|$)/.test(location.search)) return;\n  var ID='G-52E1LMP010';\n  var seen=[];\n  try{\n    new PerformanceObserver(function(list){\n      list.getEntries().forEach(function(e){seen.push(e.name||'');});\n    }).observe({entryTypes:['resource']});\n  }catch(e){}\n  function resources(){\n    var a=seen.slice();\n    try{a=a.concat(performance.getEntriesByType('resource').map(function(e){return e.name||'';}));}catch(e){}\n    return a;\n  }\n  function has(re){return resources().some(function(u){return re.test(u);});}\n  function esc(x){return String(x).replace(/[&<>\"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c];});}\n  var st=document.createElement('style');\n  st.textContent='#gyAiBtnV3{position:fixed;right:18px;top:92px;z-index:2147483646;border:0;border-radius:999px;padding:11px 16px;background:#111;color:#ffd54a;font:800 13px Arial;box-shadow:0 12px 30px rgba(0,0,0,.28);cursor:pointer}#gyAiV3{position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.76);display:none;align-items:center;justify-content:center;padding:18px;font-family:Arial,sans-serif}#gyAiV3 .box{width:min(790px,96vw);max-height:88vh;overflow:auto;background:#fff;border-radius:22px;padding:22px;box-shadow:0 30px 90px rgba(0,0,0,.42)}#gyAiV3 .row{display:flex;justify-content:space-between;gap:15px;padding:13px 0;border-bottom:1px solid #eee}#gyAiV3 .ok{color:#087d34;font-weight:900}#gyAiV3 .bad{color:#b00020;font-weight:900}#gyAiV3 .warn{color:#9a6700;font-weight:900}#gyAiV3 button{border:0;border-radius:12px;padding:11px 14px;font-weight:900;cursor:pointer;margin:6px 6px 0 0}#gyRunV3{background:#111;color:#fff}#gyCopyV3{background:#f4c430;color:#111}#gyCloseV3{background:#eee;color:#111}#gySummaryV3{margin-top:14px;padding:14px;border-radius:14px;background:#f7f7f7;white-space:pre-wrap;line-height:1.55}';\n  document.head.appendChild(st);\n  var b=document.createElement('button');b.id='gyAiBtnV3';b.textContent='🤖 AI KONTROL V3';document.body.appendChild(b);\n  var o=document.createElement('div');o.id='gyAiV3';o.innerHTML='<div class="box"><h2>🤖 Güçlü Yapı Akıllı Kontrol V3</h2><p>Google etiketinin gerçekten yüklendiğini ve GA4 ağ isteğinin çıktığını kontrol eder.</p><div id="gyResV3"></div><div id="gySummaryV3">Kontrol henüz çalıştırılmadı.</div><button id="gyRunV3">Kontrol Et</button><button id="gyCopyV3">Raporu Kopyala</button><button id="gyCloseV3">Kapat</button></div>';document.body.appendChild(o);\n  var res=document.getElementById('gyResV3'), sum=document.getElementById('gySummaryV3'), report='';\n  function row(name,state,detail){var cls=state==='ok'?'ok':(state==='warn'?'warn':'bad');var lab=state==='ok'?'✅ OK':(state==='warn'?'⚠️ UYARI':'❌ SORUN');return '<div class="row"><div><b>'+esc(name)+'</b><br><small>'+esc(detail||'')+'</small></div><div class="'+cls+'">'+lab+'</div></div>';}\n  function run(){\n    seen.length=0;\n    var wa=document.querySelectorAll('a[href*="wa.me"],a[href*="api.whatsapp.com"],a[href^="whatsapp:"]').length;\n    var gtagFn=typeof window.gtag==='function';\n    var scriptEl=Array.prototype.find.call(document.scripts,function(s){return (s.src||'').indexOf('googletagmanager.com/gtag/js?id='+ID)!==-1;});\n    var scriptResource=has(/googletagmanager\.com\/gtag\/js/i);\n    var dl=Array.isArray(window.dataLayer);\n    var base=[\n      row('GA4 ölçüm kimliği',document.documentElement.innerHTML.indexOf(ID)!==-1?'ok':'bad',ID),\n      row('gtag fonksiyonu',gtagFn?'ok':'bad',gtagFn?'gtag() hazır':'gtag() yok'),\n      row('dataLayer',dl?'ok':'bad',dl?('Kayıt sayısı: '+window.dataLayer.length):'dataLayer yok'),\n      row('WhatsApp bağlantıları',wa>0?'ok':'bad',wa+' adet bağlantı bulundu'),\n      row('Google tag script etiketi',scriptEl?'ok':'bad',scriptEl?'gtag.js script etiketi sayfada':'gtag.js script etiketi yok'),\n      row('Google tag ağdan yüklendi',scriptResource?'ok':'warn',scriptResource?'gtag.js resource kaydı görüldü':'Henüz resource kaydı görülmedi')\n    ];\n    res.innerHTML=base.join('');\n    sum.textContent='Test olayı gönderiliyor ve ağ isteği bekleniyor...';\n    try{if(gtagFn)window.gtag('event','gy_diagnostic_test_v3',{debug_mode:true,non_interaction:true,transport_type:'beacon'});}catch(e){}\n    setTimeout(function(){\n      var r=resources();\n      var collect=r.filter(function(u){return /google-analytics\.com|analytics\.google\.com/i.test(u) && /collect/i.test(u);});\n      var gtagLoads=r.filter(function(u){return /googletagmanager\.com\/gtag\/js/i.test(u);});\n      var collectOk=collect.length>0;\n      res.innerHTML += row('Google Analytics collect isteği',collectOk?'ok':'bad',collectOk?collect[collect.length-1]:'Collect isteği tespit edilemedi');\n      var notes=[];\n      if(!gtagFn)notes.push('gtag() oluşmamış.');\n      if(!scriptEl)notes.push('gtag.js script etiketi yok.');\n      if(scriptEl && !gtagLoads.length)notes.push('gtag.js etiketi var ama ağdan yüklenmiş görünmüyor. Ağ/DNS/gizlilik engeli olabilir.');\n      if(gtagLoads.length && !collectOk)notes.push('gtag.js yüklenmiş ama GA4 collect isteği çıkmamış. Etiket çalışması veya ağ engeli incelenmeli.');\n      if(collectOk)notes.push('GA4 isteği tarayıcıdan çıktı. Analytics tarafında veri görünmüyorsa mülk/stream/filtre tarafını kontrol edin.');\n      sum.textContent=(collectOk?'SONUÇ: Ağ gönderimi başarılı.':'SONUÇ: Ağ gönderimi başarısız.')+'\\n\\n'+notes.join('\\n');\n      report='GÜÇLÜ YAPI AKILLI KONTROL V3\\nURL: '+location.href+'\\nGA4: '+ID+'\\nGTAG_LOADS: '+gtagLoads.length+'\\nCOLLECTS: '+collect.length+'\\n'+sum.textContent;\n    },5000);\n  }\n  b.onclick=function(){o.style.display='flex';};document.getElementById('gyCloseV3').onclick=function(){o.style.display='none';};document.getElementById('gyRunV3').onclick=run;document.getElementById('gyCopyV3').onclick=function(){if(navigator.clipboard)navigator.clipboard.writeText(report||sum.textContent);};\n})();\n</script>\n</body>
+  /* Sadece ?kontrol=1 varsa paneli göster */
+  if (!new URLSearchParams(location.search).has("kontrol")) {
+    return;
+  }
+
+  var button = document.createElement("button");
+  button.innerHTML = "🤖 AI KONTROL";
+
+  button.style.position = "fixed";
+  button.style.top = "90px";
+  button.style.right = "20px";
+  button.style.zIndex = "999999";
+  button.style.padding = "12px 18px";
+  button.style.border = "0";
+  button.style.borderRadius = "20px";
+  button.style.background = "#111";
+  button.style.color = "#ffd54a";
+  button.style.fontWeight = "bold";
+  button.style.cursor = "pointer";
+
+  document.body.appendChild(button);
+
+  button.onclick = function () {
+    var ga4 = document.documentElement.innerHTML.includes("G-52E1LMP010");
+    var gtag = typeof window.gtag === "function";
+    var dataLayer = Array.isArray(window.dataLayer);
+
+    var whatsappCount = document.querySelectorAll(
+      'a[href*="wa.me"],' +
+      'a[href*="api.whatsapp.com"],' +
+      'a[href*="web.whatsapp.com"],' +
+      'a[href^="whatsapp:"]'
+    ).length;
+
+    var sonuc =
+      "GÜÇLÜ YAPI KONTROL\n\n" +
+      "GA4 kimliği: " + (ga4 ? "✅ VAR" : "❌ YOK") + "\n" +
+      "gtag: " + (gtag ? "✅ ÇALIŞIYOR" : "❌ ÇALIŞMIYOR") + "\n" +
+      "dataLayer: " + (dataLayer ? "✅ VAR" : "❌ YOK") + "\n" +
+      "WhatsApp bağlantısı: " + whatsappCount + " adet";
+
+    alert(sonuc);
+
+    if (gtag) {
+      window.gtag("event", "gy_test_event", {
+        debug_mode: true
+      });
+
+      console.log("✅ GA4 test olayı gönderildi");
+    }
+  };
+})();
+</script>
+
+
+</body>
 </html>
