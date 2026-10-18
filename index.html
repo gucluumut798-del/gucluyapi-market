@@ -3141,6 +3141,9 @@ footer{background:linear-gradient(180deg,#182230,#21324a)!important}
 
 
 <!-- GÜÇLÜ YAPI Google Ads destination -->
+
+
+<!-- GÜÇLÜ YAPI Google Ads destination -->
 <script id="gy-google-ads-base">
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function(){dataLayer.push(arguments);};
@@ -4781,6 +4784,9 @@ Net keşif ve teklif için dönüş yapabilir misiniz?`;
 
 
 <!-- GÜÇLÜ YAPI contact conversion tracking -->
+
+
+<!-- GÜÇLÜ YAPI contact conversion tracking -->
 <script id="gy-contact-tracking-v4">
 (function(){
   'use strict';
@@ -4816,5 +4822,28 @@ Net keşif ve teklif için dönüş yapabilir misiniz?`;
       });
     }
   }, true);
+})();
+</script>
+
+<script id="gy-hide-ai-control">
+(function(){
+  function clean(){
+    try {
+      var u = new URL(location.href);
+      if (u.searchParams.has('kontrol')) {
+        u.searchParams.delete('kontrol');
+        history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + u.hash);
+      }
+    } catch(e) {}
+    document.querySelectorAll('button,a,[role="button"],div,span').forEach(function(el){
+      var t=(el.textContent||'').replace(/\s+/g,' ').trim().toUpperCase();
+      if(t==='AI KONTROL' || t==='🤖 AI KONTROL'){
+        var x=el.closest('button,a,[role="button"]')||el;
+        x.style.setProperty('display','none','important');
+      }
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',clean); else clean();
+  new MutationObserver(clean).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script>
