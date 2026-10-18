@@ -1,0 +1,102 @@
+name: Guclu Yapi Site SEO and Tracking Fix
+
+on:
+  push:
+    paths:
+      - '.github/workflows/site-seo-tracking-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Patch index.html safely
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('index.html')
+          s = path.read_text(encoding='utf-8', errors='ignore')
+
+          # 1) Remove old/broken WhatsApp conversion and AI diagnostic script blocks.
+          script_re = re.compile(r'<script\b[^>]*>.*?</script>', re.I | re.S)
+          def clean_script(m):
+              block = m.group(0)
+              low = block.lower()
+              if ('ads_conversion_contact' in low or
+                  'gytrackwhatsapp' in low or
+                  'ai kontrol' in low or
+                  'gy-ai-diagnostic' in low or
+                  'gy-whatsapp-conversion' in low or
+                  'gy-contact-tracking' in low):
+                  return ''
+              return block
+          s = script_re.sub(clean_script, s)
+
+          # 2) SEO title + description + first H1 for high-intent local searches.
+          s = re.sub(
+              r'<title>.*?</title>',
+              '<title>İzmir Mantolama Ustası &amp; Dış Cephe Boya | GÜÇLÜ YAPI</title>',
+              s, count=1, flags=re.I | re.S
+          )
+          s = re.sub(
+              r'<meta\s+content="[^"]*"\s+name="description"\s*/?>',
+              '<meta content="İzmir mantolama ustası, dış cephe boya ve tamirat hizmetleri. GÜÇLÜ YAPI; Menemen ve İzmir genelinde fileli sıva, dekoratif sıva ve izolasyon için ücretsiz keşif sunar." name="description"/>',
+              s, count=1, flags=re.I
+          )
+          s = re.sub(
+              r'<meta\s+content="[^"]*"\s+property="og:title"\s*/?>',
+              '<meta content="İzmir Mantolama Ustası &amp; Dış Cephe Boya | GÜÇLÜ YAPI" property="og:title"/>',
+              s, count=1, flags=re.I
+          )
+          s = re.sub(
+              r'<meta\s+content="[^"]*"\s+name="twitter:title"\s*/?>',
+              '<meta content="İzmir Mantolama Ustası &amp; Dış Cephe Boya | GÜÇLÜ YAPI" name="twitter:title"/>',
+              s, count=1, flags=re.I
+          )
+          s = re.sub(
+              r'<h1\b[^>]*>.*?</h1>',
+              '<h1>İzmir Mantolama Ustası, Dış Cephe Boya ve Tamirat | <span>GÜÇLÜ YAPI</span></h1>',
+              s, count=1, flags=re.I | re.S
+          )
+
+          # 3) Make sure the standard GA4 base tag exists.
+          if 'googletagmanager.com/gtag/js?id=G-52E1LMP010' not in s:
+              ga4_base = '''\n<!-- GÜÇLÜ YAPI Google tag -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=G-52E1LMP010"></script>\n<script id="gy-google-base">\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-52E1LMP010');\n</script>\n'''
+              s = s.replace('</head>', ga4_base + '</head>', 1)
+
+          # 4) Add Google Ads destination for the actual Ads account tracking id.
+          if 'AW-71857337840' not in s:
+              ads_base = '''\n<!-- GÜÇLÜ YAPI Google Ads destination -->\n<script id="gy-google-ads-base">\n  window.dataLayer = window.dataLayer || [];\n  window.gtag = window.gtag || function(){dataLayer.push(arguments);};\n  gtag('config', 'AW-71857337840');\n</script>\n'''
+              s = s.replace('</head>', ads_base + '</head>', 1)
+
+          # 5) One canonical contact-tracking listener. Fires only on real clicks.
+          contact = '''\n<!-- GÜÇLÜ YAPI contact conversion tracking -->\n<script id="gy-contact-tracking-v4">\n(function(){\n  'use strict';\n  if (window.__gyContactTrackingV4) return;\n  window.__gyContactTrackingV4 = true;\n\n  function sendEvent(name, params){\n    if (typeof window.gtag !== 'function') return;\n    window.gtag('event', name, Object.assign({transport_type:'beacon'}, params || {}));\n  }\n\n  document.addEventListener('click', function(event){\n    var link = event.target.closest ? event.target.closest('a[href]') : null;\n    if (!link) return;\n    var raw = link.getAttribute('href') || '';\n    var href = raw.toLowerCase();\n\n    if (href.indexOf('wa.me/') !== -1 ||\n        href.indexOf('api.whatsapp.com/') !== -1 ||\n        href.indexOf('web.whatsapp.com/') !== -1 ||\n        href.indexOf('whatsapp:') === 0) {\n      sendEvent('ads_conversion_contact', {\n        contact_method: 'whatsapp',\n        link_url: link.href || raw\n      });\n      return;\n    }\n\n    if (href.indexOf('tel:') === 0) {\n      sendEvent('phone_click', {\n        contact_method: 'phone',\n        link_url: raw\n      });\n    }\n  }, true);\n})();\n</script>\n'''
+          end = s.lower().rfind('</body>')
+          if end >= 0:
+              s = s[:end] + contact + s[end:]
+          else:
+              s += contact
+
+          path.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit site fix
+        shell: bash
+        run: |
+          git config user.name "Guclu Yapi Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add index.html
+          if git diff --cached --quiet; then
+            echo "No changes needed"
+          else
+            git commit -m "Fix SEO and Google Ads tracking [seo-fix]"
+            git push
+          fi
