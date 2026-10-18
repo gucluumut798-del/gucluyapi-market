@@ -3127,15 +3127,6 @@ header .nav-btn{color:#111!important}
 footer{background:linear-gradient(180deg,#182230,#21324a)!important}
 @media(max-width:650px){.discovery-grid,.discovery-actions{grid-template-columns:1fr}}
 </style>
-
-<!-- Google tag (gtag.js) - GÜÇLÜ YAPI GA4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-52E1LMP010"></script>
-<script id="gy-ga4-base">
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-52E1LMP010', { send_page_view: true });
-</script>
 </head>
 <body>
 <div id="gyScrollProgress"></div>
@@ -3885,7 +3876,6 @@ Hizmet: ${service}
 Adres / Mahalle: ${location || "-"}
 Aciklama: ${note || "-"}`;
 
-      if (typeof window.gyTrackWhatsapp === "function") window.gyTrackWhatsapp();
       window.open("https://wa.me/" + number + "?text=" + encodeURIComponent(text), "_blank");
       closeOfferModal();
     }
@@ -4336,7 +4326,6 @@ Tahmini toplam: ${total.toLocaleString("tr-TR")} TL
 
 Net keşif ve teklif için dönüş yapabilir misiniz?`;
 
-      if (typeof window.gyTrackWhatsapp === "function") window.gyTrackWhatsapp();
       window.open("https://wa.me/905013242145?text=" + encodeURIComponent(text), "_blank");
     }
 
@@ -4766,91 +4755,5 @@ Net keşif ve teklif için dönüş yapabilir misiniz?`;
 <script id="gy-trust-anim-v7">
 (function(){const items=[...document.querySelectorAll('.reveal-trust')];if(!items.length)return;if(!('IntersectionObserver'in window)){items.forEach(x=>x.classList.add('is-visible'));return;}const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=items.indexOf(e.target);setTimeout(()=>e.target.classList.add('is-visible'),Math.max(0,i)*90);io.unobserve(e.target);}}),{threshold:.18});items.forEach(x=>io.observe(x));})();
 </script>
-  <!-- GÜÇLÜ YAPI WhatsApp + Akıllı Kontrol -->
-<script>
-(function () {
-  "use strict";
-
-  /* WhatsApp dönüşümü */
-  document.addEventListener("click", function (event) {
-    var link = event.target.closest("a[href]");
-    if (!link) return;
-
-    var href = (link.getAttribute("href") || "").toLowerCase();
-
-    var whatsapp =
-      href.includes("wa.me") ||
-      href.includes("api.whatsapp.com") ||
-      href.includes("web.whatsapp.com") ||
-      href.startsWith("whatsapp:");
-
-    if (!whatsapp) return;
-
-    if (typeof window.gtag === "function") {
-      window.gtag("event", "ads_conversion_contact", {
-        contact_method: "whatsapp",
-        link_url: link.href
-      });
-
-      console.log("✅ WhatsApp dönüşümü gönderildi");
-    }
-  }, true);
-
-
-  /* Sadece ?kontrol=1 varsa paneli göster */
-  if (!new URLSearchParams(location.search).has("kontrol")) {
-    return;
-  }
-
-  var button = document.createElement("button");
-  button.innerHTML = "🤖 AI KONTROL";
-
-  button.style.position = "fixed";
-  button.style.top = "90px";
-  button.style.right = "20px";
-  button.style.zIndex = "999999";
-  button.style.padding = "12px 18px";
-  button.style.border = "0";
-  button.style.borderRadius = "20px";
-  button.style.background = "#111";
-  button.style.color = "#ffd54a";
-  button.style.fontWeight = "bold";
-  button.style.cursor = "pointer";
-
-  document.body.appendChild(button);
-
-  button.onclick = function () {
-    var ga4 = document.documentElement.innerHTML.includes("G-52E1LMP010");
-    var gtag = typeof window.gtag === "function";
-    var dataLayer = Array.isArray(window.dataLayer);
-
-    var whatsappCount = document.querySelectorAll(
-      'a[href*="wa.me"],' +
-      'a[href*="api.whatsapp.com"],' +
-      'a[href*="web.whatsapp.com"],' +
-      'a[href^="whatsapp:"]'
-    ).length;
-
-    var sonuc =
-      "GÜÇLÜ YAPI KONTROL\n\n" +
-      "GA4 kimliği: " + (ga4 ? "✅ VAR" : "❌ YOK") + "\n" +
-      "gtag: " + (gtag ? "✅ ÇALIŞIYOR" : "❌ ÇALIŞMIYOR") + "\n" +
-      "dataLayer: " + (dataLayer ? "✅ VAR" : "❌ YOK") + "\n" +
-      "WhatsApp bağlantısı: " + whatsappCount + " adet";
-
-    alert(sonuc);
-
-    if (gtag) {
-      window.gtag("event", "gy_test_event", {
-        debug_mode: true
-      });
-
-      console.log("✅ GA4 test olayı gönderildi");
-    }
-  };
-})();
-</script>
-
-
 </body>
 </html>
