@@ -37,10 +37,14 @@ jobs:
                   'gy-whatsapp-conversion' in low or
                   'gy-contact-tracking' in low or
                   'gy-google-ads-base' in low or
-                  'aw-71857337840' in low):
+                  'aw-71857337840' in low or
+                  'kontrol=1' in low):
                   return ''
               return block
           s = script_re.sub(clean_script, s)
+
+          # Remove leftover AI KONTROL text/button markup if it exists directly in HTML.
+          s = re.sub(r'<(?:button|a|div|span)\b[^>]*>\s*(?:🤖\s*)?AI\s*KONTROL\s*</(?:button|a|div|span)>', '', s, flags=re.I | re.S)
 
           # SEO for high-intent local searches.
           s = re.sub(
@@ -80,11 +84,16 @@ jobs:
 
           # Canonical click listener. Only real WhatsApp/phone clicks fire events.
           contact = '''\n<!-- GÜÇLÜ YAPI contact conversion tracking -->\n<script id="gy-contact-tracking-v4">\n(function(){\n  'use strict';\n  if (window.__gyContactTrackingV4) return;\n  window.__gyContactTrackingV4 = true;\n\n  function sendEvent(name, params){\n    if (typeof window.gtag !== 'function') return;\n    window.gtag('event', name, Object.assign({transport_type:'beacon'}, params || {}));\n  }\n\n  document.addEventListener('click', function(event){\n    var link = event.target.closest ? event.target.closest('a[href]') : null;\n    if (!link) return;\n    var raw = link.getAttribute('href') || '';\n    var href = raw.toLowerCase();\n\n    if (href.indexOf('wa.me/') !== -1 ||\n        href.indexOf('api.whatsapp.com/') !== -1 ||\n        href.indexOf('web.whatsapp.com/') !== -1 ||\n        href.indexOf('whatsapp:') === 0) {\n      sendEvent('ads_conversion_contact', {\n        contact_method: 'whatsapp',\n        link_url: link.href || raw\n      });\n      return;\n    }\n\n    if (href.indexOf('tel:') === 0) {\n      sendEvent('phone_click', {\n        contact_method: 'phone',\n        link_url: raw\n      });\n    }\n  }, true);\n})();\n</script>\n'''
+
+          # Force-hide any AI KONTROL UI that could still be injected dynamically.
+          hide_ai = '''\n<script id="gy-hide-ai-control">\n(function(){\n  function clean(){\n    try {\n      var u = new URL(location.href);\n      if (u.searchParams.has('kontrol')) {\n        u.searchParams.delete('kontrol');\n        history.replaceState({}, '', u.pathname + (u.search ? u.search : '') + u.hash);\n      }\n    } catch(e) {}\n    document.querySelectorAll('button,a,[role="button"],div,span').forEach(function(el){\n      var t=(el.textContent||'').replace(/\\s+/g,' ').trim().toUpperCase();\n      if(t==='AI KONTROL' || t==='🤖 AI KONTROL'){\n        var x=el.closest('button,a,[role="button"]')||el;\n        x.style.setProperty('display','none','important');\n      }\n    });\n  }\n  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',clean); else clean();\n  new MutationObserver(clean).observe(document.documentElement,{childList:true,subtree:true});\n})();\n</script>\n'''
+
           end = s.lower().rfind('</body>')
+          inject = contact + hide_ai
           if end >= 0:
-              s = s[:end] + contact + s[end:]
+              s = s[:end] + inject + s[end:]
           else:
-              s += contact
+              s += inject
 
           path.write_text(s, encoding='utf-8')
           PY
@@ -98,6 +107,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes needed"
           else
-            git commit -m "Correct Ads tag and keep SEO tracking clean"
+            git commit -m "Remove AI control and keep SEO tracking clean"
             git push
           fi
