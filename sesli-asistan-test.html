@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Güçlü Yapı Sesli Asistan Test</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#f3f4f6;margin:0;padding:24px;color:#111}
+    .card{max-width:760px;margin:40px auto;background:#fff;border-radius:22px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
+    h1{margin-top:0}
+    .status{padding:12px 14px;background:#f7f7f7;border-radius:12px;margin:14px 0}
+    button{border:0;border-radius:14px;padding:14px 18px;font-weight:700;cursor:pointer;margin-right:8px;margin-top:8px}
+    .start{background:#111;color:#fff}.mic{background:#f4c430;color:#111}.stop{background:#eee}
+    textarea{width:100%;min-height:120px;border:1px solid #ddd;border-radius:14px;padding:12px;box-sizing:border-box;margin-top:12px;font:inherit}
+    .reply{margin-top:16px;padding:16px;border-radius:14px;background:#eef6ff;min-height:54px;white-space:pre-wrap}
+    small{display:block;margin-top:12px;color:#666;line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎙️ Güçlü Yapı Sesli Asistan – Test</h1>
+    <p>Bu sayfa sadece ses sistemini test eder. Ana siteye dokunmaz.</p>
+    <div id="status" class="status">Durum: Hazır</div>
+
+    <button class="start" id="startBtn">🔊 Asistanı Başlat</button>
+    <button class="mic" id="micBtn">🎤 Konuş</button>
+    <button class="stop" id="stopBtn">⏹ Sesi Durdur</button>
+
+    <textarea id="text" placeholder="Buraya da yazabilirsin..."></textarea>
+    <button class="start" id="answerBtn">Cevabı Seslendir</button>
+
+    <div id="reply" class="reply">Henüz cevap yok.</div>
+    <small>
+      Not: Mikrofon ilk kullanımda izin ister. Tarayıcı sesli yanıtı ancak sen bir butona bastıktan sonra başlatabilir. Chrome/Edge'de genelde çalışır; destek yoksa yazılı kullanım devam eder.
+    </small>
+  </div>
+
+<script>
+(function(){
+  const statusEl = document.getElementById('status');
+  const textEl = document.getElementById('text');
+  const replyEl = document.getElementById('reply');
+
+  function setStatus(t){ statusEl.textContent = 'Durum: ' + t; }
+
+  function pickTurkishVoice(){
+    const voices = speechSynthesis.getVoices();
+    return voices.find(v => /^tr(-|_)/i.test(v.lang)) || voices.find(v => /Turk/i.test(v.name)) || voices[0] || null;
+  }
+
+  function speak(text){
+    if (!('speechSynthesis' in window)) {
+      setStatus('Bu tarayıcı sesli okumayı desteklemiyor');
+      return;
+    }
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'tr-TR';
+    const v = pickTurkishVoice();
+    if (v) u.voice = v;
+    u.rate = 0.98;
+    u.pitch = 1;
+    u.onstart = () => setStatus('Konuşuyor');
+    u.onend = () => setStatus('Hazır');
+    u.onerror = () => setStatus('Seslendirme hatası');
+    speechSynthesis.speak(u);
+  }
+
+  function makeDemoReply(input){
+    const q = (input || '').toLowerCase();
+    if (q.includes('mantolama')) return 'Elbette. Güçlü Yapı olarak İzmir ve Menemen bölgesinde mantolama hizmeti veriyoruz. Bina kaç katlı ve hangi ilçede?';
+    if (q.includes('boya')) return 'Dış cephe boya ve tamirat hizmetimiz var. Ücretsiz keşif için bina konumunu ve mümkünse birkaç fotoğrafı paylaşabilirsiniz.';
+    if (q.includes('fiyat') || q.includes('ücret')) return 'Net fiyat için bina ölçüsü, yapılacak işlem ve yüzey durumunu bilmemiz gerekiyor. Ücretsiz keşifle net teklif hazırlayabiliriz.';
+    if (q.includes('izmir') || q.includes('menemen')) return 'Evet, İzmir ve Menemen başta olmak üzere Ege bölgesinde hizmet veriyoruz.';
+    return 'Size yardımcı olabilirim. Mantolama, dış cephe boya, fileli sıva, dekoratif sıva, izolasyon veya ücretsiz keşif hakkında sorabilirsiniz.';
+  }
+
+  document.getElementById('startBtn').onclick = function(){
+    const msg = 'Merhaba, Güçlü Yapı sesli asistanına hoş geldiniz. Mantolama, dış cephe boya, izolasyon veya ücretsiz keşif hakkında bana sorabilirsiniz.';
+    replyEl.textContent = msg;
+    speak(msg);
+  };
+
+  document.getElementById('answerBtn').onclick = function(){
+    const ans = makeDemoReply(textEl.value);
+    replyEl.textContent = ans;
+    speak(ans);
+  };
+
+  document.getElementById('stopBtn').onclick = function(){
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    setStatus('Durduruldu');
+  };
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    document.getElementById('micBtn').disabled = true;
+    document.getElementById('micBtn').textContent = '🎤 Mikrofon desteklenmiyor';
+  } else {
+    const rec = new SR();
+    rec.lang = 'tr-TR';
+    rec.interimResults = false;
+    rec.maxAlternatives = 1;
+
+    document.getElementById('micBtn').onclick = function(){
+      try {
+        setStatus('Dinliyor...');
+        rec.start();
+      } catch(e) {
+        setStatus('Mikrofon zaten açık olabilir');
+      }
+    };
+
+    rec.onresult = function(e){
+      const heard = e.results[0][0].transcript;
+      textEl.value = heard;
+      const ans = makeDemoReply(heard);
+      replyEl.textContent = ans;
+      setStatus('Anlaşıldı: ' + heard);
+      speak(ans);
+    };
+    rec.onerror = function(e){ setStatus('Mikrofon hatası: ' + e.error); };
+    rec.onend = function(){ if (!speechSynthesis.speaking) setStatus('Hazır'); };
+  }
+})();
+</script>
+</body>
+</html>
