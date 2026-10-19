@@ -3,125 +3,199 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Güçlü Yapı Sesli Asistan Test</title>
+  <title>Güçlü Yapı Sesli Keşif Asistanı</title>
   <style>
-    body{font-family:Arial,sans-serif;background:#f3f4f6;margin:0;padding:24px;color:#111}
-    .card{max-width:760px;margin:40px auto;background:#fff;border-radius:22px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,.12)}
-    h1{margin-top:0}
-    .status{padding:12px 14px;background:#f7f7f7;border-radius:12px;margin:14px 0}
-    button{border:0;border-radius:14px;padding:14px 18px;font-weight:700;cursor:pointer;margin-right:8px;margin-top:8px}
-    .start{background:#111;color:#fff}.mic{background:#f4c430;color:#111}.stop{background:#eee}
-    textarea{width:100%;min-height:120px;border:1px solid #ddd;border-radius:14px;padding:12px;box-sizing:border-box;margin-top:12px;font:inherit}
-    .reply{margin-top:16px;padding:16px;border-radius:14px;background:#eef6ff;min-height:54px;white-space:pre-wrap}
-    small{display:block;margin-top:12px;color:#666;line-height:1.5}
+    :root{--navy:#142238;--navy2:#1d3150;--gold:#f4c430;--green:#22c55e;--soft:#f4f6f8;--text:#111827}
+    *{box-sizing:border-box}
+    body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#eef2f7,#f8fafc);margin:0;padding:20px;color:var(--text)}
+    .wrap{max-width:900px;margin:24px auto}
+    .brand{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(20,34,56,.2)}
+    .brand h1{margin:0 0 8px;font-size:30px}.brand strong{color:var(--gold)}
+    .brand p{margin:7px 0;line-height:1.55;color:#e5e7eb}
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.badge{background:rgba(255,255,255,.1);padding:8px 10px;border-radius:999px;font-size:13px}
+    .card{margin-top:16px;background:#fff;border-radius:22px;padding:20px;box-shadow:0 16px 45px rgba(0,0,0,.08)}
+    .status{padding:11px 13px;background:#f7f7f7;border-radius:12px;margin:10px 0;font-weight:700}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    button{border:0;border-radius:13px;padding:13px 16px;font-weight:800;cursor:pointer}
+    .start{background:#111;color:#fff}.mic{background:var(--gold);color:#111}.stop{background:#e5e7eb}.send{background:#16a34a;color:#fff;width:100%;font-size:16px}
+    .quick{background:#edf2f7;color:#172033;font-weight:700}
+    .conversation{margin-top:14px;border:1px solid #e5e7eb;border-radius:16px;padding:14px;min-height:120px;max-height:330px;overflow:auto;background:#fafafa}
+    .msg{max-width:86%;padding:11px 13px;border-radius:14px;margin:8px 0;line-height:1.45;white-space:pre-wrap}
+    .bot{background:#eaf2ff;border-bottom-left-radius:4px}.user{background:#fff2bf;margin-left:auto;border-bottom-right-radius:4px}
+    .inputrow{display:flex;gap:8px;margin-top:12px}.inputrow input{flex:1;border:1px solid #d1d5db;border-radius:13px;padding:13px;font:inherit}.inputrow button{background:#111;color:#fff}
+    .formbox{display:none;margin-top:18px;border-top:1px solid #eee;padding-top:18px}
+    .formbox.show{display:block}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{font-size:13px;font-weight:800;display:block;margin-bottom:6px}
+    input,select,textarea{width:100%;border:1px solid #d1d5db;border-radius:12px;padding:12px;font:inherit;background:#fff}
+    textarea{min-height:90px;resize:vertical}
+    .full{grid-column:1/-1}.wa-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+    .wa{display:block;text-decoration:none;text-align:center;background:#25D366;color:#fff;padding:12px;border-radius:12px;font-weight:800}
+    .note{margin-top:10px;color:#6b7280;font-size:12px;line-height:1.45}
+    @media(max-width:650px){.grid,.wa-grid{grid-template-columns:1fr}.brand h1{font-size:24px}.msg{max-width:94%}}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>🎙️ Güçlü Yapı Sesli Asistan – Test</h1>
-    <p>Bu sayfa sadece ses sistemini test eder. Ana siteye dokunmaz.</p>
+<div class="wrap">
+  <section class="brand">
+    <h1>🎙️ <strong>GÜÇLÜ YAPI</strong> Sesli Keşif Asistanı</h1>
+    <p><b>42 yıllık ustalık tecrübesiyle</b> İzmir ve Ege Bölgesi'nde dış cephe boya, mantolama, fileli sıva, dekoratif sıva, çatı/teras izolasyonu ve tadilat uygulamaları yapıyoruz.</p>
+    <p>Asistan sorununuzu dinler, size birkaç kısa soru sorar ve keşif bilgilerinizi WhatsApp üzerinden ekibimize hazır mesaj olarak gönderir.</p>
+    <div class="badges"><span class="badge">🏠 Dış Cephe</span><span class="badge">🧱 Mantolama</span><span class="badge">💧 Çatı İzolasyonu</span><span class="badge">🎨 DYO / Jotun</span><span class="badge">📍 İzmir / Menemen</span></div>
+  </section>
+
+  <section class="card">
     <div id="status" class="status">Durum: Hazır</div>
+    <div class="actions">
+      <button class="start" id="startBtn">🔊 Asistanı Başlat</button>
+      <button class="mic" id="micBtn">🎤 Konuş</button>
+      <button class="stop" id="stopBtn">⏹ Sesi Durdur</button>
+    </div>
 
-    <button class="start" id="startBtn">🔊 Asistanı Başlat</button>
-    <button class="mic" id="micBtn">🎤 Konuş</button>
-    <button class="stop" id="stopBtn">⏹ Sesi Durdur</button>
+    <div class="actions">
+      <button class="quick" data-q="Evimin çatısından su akıyor">💧 Çatıdan su akıyor</button>
+      <button class="quick" data-q="Mantolama yaptırmak istiyorum">🧱 Mantolama</button>
+      <button class="quick" data-q="Dış cephe boya yaptırmak istiyorum">🎨 Dış cephe boya</button>
+      <button class="quick" data-q="Ücretsiz keşif istiyorum">📍 Keşif istiyorum</button>
+    </div>
 
-    <textarea id="text" placeholder="Buraya da yazabilirsin..."></textarea>
-    <button class="start" id="answerBtn">Cevabı Seslendir</button>
+    <div id="conversation" class="conversation"></div>
+    <div class="inputrow">
+      <input id="text" placeholder="Sorunuzu yazın veya mikrofonla söyleyin...">
+      <button id="sendText">Gönder</button>
+    </div>
 
-    <div id="reply" class="reply">Henüz cevap yok.</div>
-    <small>
-      Not: Mikrofon ilk kullanımda izin ister. Tarayıcı sesli yanıtı ancak sen bir butona bastıktan sonra başlatabilir. Chrome/Edge'de genelde çalışır; destek yoksa yazılı kullanım devam eder.
-    </small>
-  </div>
+    <div id="formBox" class="formbox">
+      <h2>📋 Ücretsiz Keşif Formu</h2>
+      <p id="formLead">Bilgileri doldurun, ardından istediğiniz Güçlü Yapı WhatsApp hattına tek tıkla gönderin.</p>
+      <div class="grid">
+        <div><label>Ad Soyad</label><input id="fName" placeholder="Adınız soyadınız"></div>
+        <div><label>Telefon</label><input id="fPhone" type="tel" placeholder="05xx xxx xx xx"></div>
+        <div><label>İlçe</label><input id="fDistrict" placeholder="Örn. Menemen"></div>
+        <div><label>Mahalle</label><input id="fNeighborhood" placeholder="Mahalle"></div>
+        <div class="full"><label>Açık Adres</label><input id="fAddress" placeholder="Sokak, bina no, site/apartman adı"></div>
+        <div><label>Hizmet</label><select id="fService"><option>Çatı / Teras Su İzolasyonu</option><option>Mantolama</option><option>Dış Cephe Boya ve Tamirat</option><option>Fileli Sıva</option><option>Dekoratif Sıva</option><option>Diğer</option></select></div>
+        <div><label>Bina Bilgisi</label><input id="fBuilding" placeholder="Örn. 5 katlı apartman"></div>
+        <div class="full"><label>Sorun / Talep</label><textarea id="fProblem" placeholder="Sorunu kısaca anlatın..."></textarea></div>
+      </div>
+
+      <button class="send" id="prepareBtn">✅ WhatsApp Mesajını Hazırla</button>
+      <div id="waButtons" class="wa-grid" style="display:none">
+        <a id="wa1" class="wa" target="_blank">WhatsApp 1</a>
+        <a id="wa2" class="wa" target="_blank">WhatsApp 2</a>
+        <a id="wa3" class="wa" target="_blank">WhatsApp 3</a>
+      </div>
+      <div class="note">WhatsApp açıldıktan sonra bina/çatı fotoğraf ve videolarını mesaja ayrıca ekleyebilirsiniz. Tarayıcı güvenliği nedeniyle dosyalar otomatik eklenemez.</div>
+    </div>
+  </section>
+</div>
 
 <script>
 (function(){
-  const statusEl = document.getElementById('status');
-  const textEl = document.getElementById('text');
-  const replyEl = document.getElementById('reply');
+  const statusEl=document.getElementById('status');
+  const textEl=document.getElementById('text');
+  const conv=document.getElementById('conversation');
+  const formBox=document.getElementById('formBox');
+  const state={step:'start',district:'',service:'',problem:''};
 
-  function setStatus(t){ statusEl.textContent = 'Durum: ' + t; }
+  function setStatus(t){statusEl.textContent='Durum: '+t}
+  function addMsg(who,text){const d=document.createElement('div');d.className='msg '+(who==='bot'?'bot':'user');d.textContent=text;conv.appendChild(d);conv.scrollTop=conv.scrollHeight}
 
   function pickTurkishVoice(){
-    const voices = speechSynthesis.getVoices();
-    return voices.find(v => /^tr(-|_)/i.test(v.lang)) || voices.find(v => /Turk/i.test(v.name)) || voices[0] || null;
+    const voices=speechSynthesis.getVoices();
+    return voices.find(v=>/^tr(-|_)/i.test(v.lang))||voices.find(v=>/Turk/i.test(v.name))||voices[0]||null;
   }
-
   function speak(text){
-    if (!('speechSynthesis' in window)) {
-      setStatus('Bu tarayıcı sesli okumayı desteklemiyor');
-      return;
-    }
+    if(!('speechSynthesis' in window)){setStatus('Sesli okuma desteklenmiyor');return}
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'tr-TR';
-    const v = pickTurkishVoice();
-    if (v) u.voice = v;
-    u.rate = 0.98;
-    u.pitch = 1;
-    u.onstart = () => setStatus('Konuşuyor');
-    u.onend = () => setStatus('Hazır');
-    u.onerror = () => setStatus('Seslendirme hatası');
-    speechSynthesis.speak(u);
+    const u=new SpeechSynthesisUtterance(text);u.lang='tr-TR';const v=pickTurkishVoice();if(v)u.voice=v;u.rate=.96;u.pitch=1;
+    u.onstart=()=>setStatus('Konuşuyor');u.onend=()=>setStatus('Hazır');u.onerror=()=>setStatus('Seslendirme hatası');speechSynthesis.speak(u);
+  }
+  function bot(text){addMsg('bot',text);speak(text)}
+  function showForm(){formBox.classList.add('show');if(state.district)document.getElementById('fDistrict').value=state.district;if(state.service)document.getElementById('fService').value=state.service;if(state.problem)document.getElementById('fProblem').value=state.problem;formBox.scrollIntoView({behavior:'smooth',block:'start'})}
+
+  function normalizeTR(s){return (s||'').toLocaleLowerCase('tr-TR').replace(/[ı]/g,'i').replace(/[ş]/g,'s').replace(/[ğ]/g,'g').replace(/[ü]/g,'u').replace(/[ö]/g,'o').replace(/[ç]/g,'c')}
+
+  function understand(input){
+    const raw=(input||'').trim(); if(!raw)return;
+    addMsg('user',raw); textEl.value='';
+    const q=normalizeTR(raw);
+
+    if(state.step==='ask_district'){
+      let district=raw.replace(/^(ben |biz |ilce |ilçem |ilcem |konum |konumum )/i,'').trim();
+      if(q.includes('menemen')) district='Menemen';
+      state.district=district||raw; state.step='form';
+      document.getElementById('fDistrict').value=state.district;
+      const reply=(normalizeTR(state.district).includes('menemen'))
+        ? 'Tamam, Menemen bölgesinde hizmet veriyoruz. Sorununuzu ekibe iletmek için size kısa bir ücretsiz keşif formu açıyorum. Adres, telefon ve bina bilgilerini doldurduğunuzda WhatsApp mesajını otomatik hazırlayacağız.'
+        : 'Tamam, '+state.district+' olarak kaydettim. Hizmet uygunluğunu ekibimiz teyit etsin. Şimdi kısa keşif formunu doldurun; adres ve telefon bilgileriniz WhatsApp mesajına otomatik eklenecek.';
+      bot(reply);showForm();return;
+    }
+
+    const roof=q.includes('cati')||q.includes('teras')||q.includes('su aki')||q.includes('sizdir')||q.includes('rutubet')||q.includes('nem');
+    const insulation=q.includes('mantolama');
+    const paint=q.includes('dis cephe')||q.includes('boya');
+    const discovery=q.includes('kesif')||q.includes('fiyat')||q.includes('teklif');
+
+    if(roof){
+      state.problem=raw; state.service='Çatı / Teras Su İzolasyonu'; state.step='ask_district';
+      bot('Geçmiş olsun. Çatıdan su alma; membran, baca dipleri, parapetler, dereler veya çatlaklardan kaynaklanabilir. Net çözüm için yerinde görmek en doğrusu. Hangi ilçedesiniz? Örneğin Menemen, Bornova, Karşıyaka gibi.');return;
+    }
+    if(insulation){
+      state.problem=raw; state.service='Mantolama'; state.step='ask_district';
+      bot('Tabii. Güçlü Yapı olarak mantolama ve dış cephe sistemleri uyguluyoruz. Size doğru keşif yönlendirmesi yapabilmem için önce hangi ilçede olduğunuzu söyler misiniz?');return;
+    }
+    if(paint){
+      state.problem=raw; state.service='Dış Cephe Boya ve Tamirat'; state.step='ask_district';
+      bot('Dış cephe boya ve tamirat uygulaması yapıyoruz. Yüzeyin çatlak, kabarma ve sıva durumuna göre uygulama planı değişir. Hangi ilçedesiniz?');return;
+    }
+    if(discovery){
+      state.problem=raw; state.step='ask_district';
+      bot('Memnuniyetle. Ücretsiz keşif kaydı oluşturabiliriz. Önce hangi ilçede olduğunuzu söyler misiniz?');return;
+    }
+    if(q.includes('menemen')){
+      state.district='Menemen';state.step='form';bot('Evet, Menemen’de hizmet veriyoruz. Size ücretsiz keşif formunu açıyorum.');showForm();return;
+    }
+    if(q.includes('kimsiniz')||q.includes('guclu yapi')||q.includes('hakkinda')){
+      bot('Güçlü Yapı; 42 yıllık ustalık tecrübesiyle İzmir ve Ege Bölgesi’nde dış cephe boya, mantolama, fileli ve dekoratif sıva, çatı ve teras izolasyonu ile tadilat işleri yapan bir uygulama ekibidir. DYO ve Jotun gibi markalarla çalışıyoruz. İsterseniz sorununuzu anlatın, sizi keşif formuna yönlendireyim.');return;
+    }
+    bot('Size yardımcı olayım. Çatıdan su alma, mantolama, dış cephe boya, sıva veya izolasyon probleminizi bana söyleyin. Gerekirse birkaç soru sorup ücretsiz keşif formunu açacağım.');
   }
 
-  function makeDemoReply(input){
-    const q = (input || '').toLowerCase();
-    if (q.includes('mantolama')) return 'Elbette. Güçlü Yapı olarak İzmir ve Menemen bölgesinde mantolama hizmeti veriyoruz. Bina kaç katlı ve hangi ilçede?';
-    if (q.includes('boya')) return 'Dış cephe boya ve tamirat hizmetimiz var. Ücretsiz keşif için bina konumunu ve mümkünse birkaç fotoğrafı paylaşabilirsiniz.';
-    if (q.includes('fiyat') || q.includes('ücret')) return 'Net fiyat için bina ölçüsü, yapılacak işlem ve yüzey durumunu bilmemiz gerekiyor. Ücretsiz keşifle net teklif hazırlayabiliriz.';
-    if (q.includes('izmir') || q.includes('menemen')) return 'Evet, İzmir ve Menemen başta olmak üzere Ege bölgesinde hizmet veriyoruz.';
-    return 'Size yardımcı olabilirim. Mantolama, dış cephe boya, fileli sıva, dekoratif sıva, izolasyon veya ücretsiz keşif hakkında sorabilirsiniz.';
+  document.getElementById('startBtn').onclick=function(){
+    const intro='Merhaba, Güçlü Yapı’ya hoş geldiniz. 42 yıllık ustalık tecrübesiyle İzmir ve Ege Bölgesi’nde dış cephe boya, mantolama, fileli sıva, dekoratif sıva, çatı ve teras izolasyonu hizmeti veriyoruz. Sorununuzu bana sesli olarak anlatabilirsiniz. Örneğin, evimin çatısından su akıyor diyebilirsiniz.';
+    addMsg('bot',intro);speak(intro);
+  };
+  document.getElementById('sendText').onclick=()=>understand(textEl.value);
+  textEl.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();understand(textEl.value)}});
+  document.querySelectorAll('.quick').forEach(b=>b.onclick=()=>understand(b.dataset.q));
+  document.getElementById('stopBtn').onclick=function(){if('speechSynthesis'in window)speechSynthesis.cancel();setStatus('Durduruldu')};
+
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){document.getElementById('micBtn').disabled=true;document.getElementById('micBtn').textContent='🎤 Mikrofon desteklenmiyor'}else{
+    const rec=new SR();rec.lang='tr-TR';rec.interimResults=false;rec.maxAlternatives=1;
+    document.getElementById('micBtn').onclick=function(){try{setStatus('Dinliyor...');rec.start()}catch(e){setStatus('Mikrofon zaten açık olabilir')}};
+    rec.onresult=e=>{const heard=e.results[0][0].transcript;setStatus('Anlaşıldı: '+heard);understand(heard)};
+    rec.onerror=e=>setStatus('Mikrofon hatası: '+e.error);rec.onend=()=>{if(!speechSynthesis.speaking)setStatus('Hazır')};
   }
 
-  document.getElementById('startBtn').onclick = function(){
-    const msg = 'Merhaba, Güçlü Yapı sesli asistanına hoş geldiniz. Mantolama, dış cephe boya, izolasyon veya ücretsiz keşif hakkında bana sorabilirsiniz.';
-    replyEl.textContent = msg;
-    speak(msg);
+  document.getElementById('prepareBtn').onclick=function(){
+    const name=document.getElementById('fName').value.trim();
+    const phone=document.getElementById('fPhone').value.trim();
+    const district=document.getElementById('fDistrict').value.trim();
+    const neighborhood=document.getElementById('fNeighborhood').value.trim();
+    const address=document.getElementById('fAddress').value.trim();
+    const service=document.getElementById('fService').value;
+    const building=document.getElementById('fBuilding').value.trim();
+    const problem=document.getElementById('fProblem').value.trim();
+    if(!name||!phone||!district){alert('Lütfen en az Ad Soyad, Telefon ve İlçe bilgilerini doldurun.');return}
+    const msg=`GÜÇLÜ YAPI - ÜCRETSİZ KEŞİF TALEBİ\n\nAd Soyad: ${name}\nTelefon: ${phone}\nİlçe: ${district}\nMahalle: ${neighborhood||'-'}\nAdres: ${address||'-'}\nHizmet: ${service}\nBina Bilgisi: ${building||'-'}\nSorun / Talep: ${problem||'-'}\n\nMüsait olduğunuzda keşif için dönüş yapabilir misiniz?`;
+    const enc=encodeURIComponent(msg);
+    const nums=['905013242145','905354176251','905073541360'];
+    nums.forEach((n,i)=>{const a=document.getElementById('wa'+(i+1));a.href='https://wa.me/'+n+'?text='+enc});
+    document.getElementById('waButtons').style.display='grid';
+    bot('Mesajınız hazır. Aşağıdaki yeşil WhatsApp düğmelerinden birine basarak keşif talebini Güçlü Yapı ekibine gönderebilirsiniz. Fotoğraf ve videolarınızı WhatsApp açıldıktan sonra ekleyebilirsiniz.');
   };
-
-  document.getElementById('answerBtn').onclick = function(){
-    const ans = makeDemoReply(textEl.value);
-    replyEl.textContent = ans;
-    speak(ans);
-  };
-
-  document.getElementById('stopBtn').onclick = function(){
-    if ('speechSynthesis' in window) speechSynthesis.cancel();
-    setStatus('Durduruldu');
-  };
-
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    document.getElementById('micBtn').disabled = true;
-    document.getElementById('micBtn').textContent = '🎤 Mikrofon desteklenmiyor';
-  } else {
-    const rec = new SR();
-    rec.lang = 'tr-TR';
-    rec.interimResults = false;
-    rec.maxAlternatives = 1;
-
-    document.getElementById('micBtn').onclick = function(){
-      try {
-        setStatus('Dinliyor...');
-        rec.start();
-      } catch(e) {
-        setStatus('Mikrofon zaten açık olabilir');
-      }
-    };
-
-    rec.onresult = function(e){
-      const heard = e.results[0][0].transcript;
-      textEl.value = heard;
-      const ans = makeDemoReply(heard);
-      replyEl.textContent = ans;
-      setStatus('Anlaşıldı: ' + heard);
-      speak(ans);
-    };
-    rec.onerror = function(e){ setStatus('Mikrofon hatası: ' + e.error); };
-    rec.onend = function(){ if (!speechSynthesis.speaking) setStatus('Hazır'); };
-  }
 })();
 </script>
 </body>
