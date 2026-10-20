@@ -1,4 +1,4 @@
-name: Repair GA4 Placement
+name: Switch GA4 Stream
 
 on:
   push:
@@ -9,13 +9,13 @@ permissions:
   contents: write
 
 jobs:
-  repair-ga4:
+  switch-ga4:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Repair only malformed GA4 placement
+      - name: Replace only GA4 stream ID
         shell: bash
         run: |
           python - <<'PY'
@@ -25,52 +25,55 @@ jobs:
           path = Path('index.html')
           s = path.read_text(encoding='utf-8', errors='ignore')
 
-          tag = '''<!-- GÜÇLÜ YAPI GA4 ONLY -->
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-52E1LMP010"></script>
-          <script id="gy-ga4-only">
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-52E1LMP010');
-          </script>
-          <!-- /GÜÇLÜ YAPI GA4 ONLY -->'''
+          old_id = 'G-52E1LMP010'
+          new_id = 'G-NQMQZ571DX'
 
-          # Previous automated insertion accidentally split the first body div.
-          # Repair exactly that malformed block and keep every other byte of the site untouched.
-          bad = re.compile(
-              r'<div id="gyScrollProgr\s*'
-              r'<!-- GÜÇLÜ YAPI GA4 ONLY -->.*?'
-              r'<!-- /GÜÇLÜ YAPI GA4 ONLY -->\s*'
-              r'ess"></div>',
+          block_re = re.compile(
+              r'<!-- GÜÇLÜ YAPI GA4 ONLY -->.*?<!-- /GÜÇLÜ YAPI GA4 ONLY -->',
               re.S
           )
+          m = block_re.search(s)
+          if not m:
+              raise SystemExit('ERROR: canonical GA4 block not found; refusing to modify anything else.')
 
-          repaired, count = bad.subn('<div id="gyScrollProgress"></div>\n' + tag, s, count=1)
-          if count != 1:
-              raise SystemExit(f'ERROR: expected exactly one malformed GA4 block, found {count}; refusing broad changes.')
+          block = m.group(0)
+          if old_id not in block:
+              if new_id in block:
+                  print('New GA4 stream ID already installed; no change needed.')
+                  raise SystemExit(0)
+              raise SystemExit('ERROR: expected old GA4 ID not found in canonical block; refusing broad changes.')
 
-          path.write_text(repaired, encoding='utf-8')
-          print('Exact malformed block repaired. Site design/content otherwise untouched.')
+          new_block = block.replace(old_id, new_id)
+          updated = s[:m.start()] + new_block + s[m.end():]
+          path.write_text(updated, encoding='utf-8')
+          print('GA4 stream switched inside canonical block only.')
           PY
 
-      - name: Verify exact repair
+      - name: Verify new GA4 tag
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
+          import re
           s = Path('index.html').read_text(encoding='utf-8', errors='ignore')
-          assert '<div id="gyScrollProgress"></div>' in s
-          assert 'googletagmanager.com/gtag/js?id=G-52E1LMP010' in s
-          assert "gtag('config', 'G-52E1LMP010')" in s
-          assert '<div id="gyScrollProgr\n<!-- GÜÇLÜ YAPI GA4 ONLY -->' not in s
-          print('Repair verification passed.')
+          m = re.search(r'<!-- GÜÇLÜ YAPI GA4 ONLY -->.*?<!-- /GÜÇLÜ YAPI GA4 ONLY -->', s, re.S)
+          assert m, 'GA4 block missing'
+          block = m.group(0)
+          assert 'googletagmanager.com/gtag/js?id=G-NQMQZ571DX' in block
+          assert "gtag('config', 'G-NQMQZ571DX')" in block
+          assert 'G-52E1LMP010' not in block
+          print('New GA4 stream verification passed.')
           PY
 
-      - name: Commit repaired index only
+      - name: Commit index only if changed
         shell: bash
         run: |
           git config user.name "Guclu Yapi Automation"
           git config user.email "actions@users.noreply.github.com"
           git add index.html
-          git commit -m "Repair GA4 placement and stray page text"
-          git push
+          if git diff --cached --quiet; then
+            echo "No site change needed"
+          else
+            git commit -m "Switch GA4 to G-NQMQZ571DX"
+            git push
+          fi
