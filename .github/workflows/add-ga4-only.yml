@@ -40,39 +40,34 @@ jobs:
               raise SystemExit('ERROR: canonical GA4 end marker not found; refusing broad changes.')
           pos += len(ga_end)
 
-          block = r'''
-
-<!-- GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->
-<script id="gy-whatsapp-conversion-v1">
-(function(){
-  'use strict';
-  if (window.__gyWhatsappConversionV1) return;
-  window.__gyWhatsappConversionV1 = true;
-
-  document.addEventListener('click', function(event){
-    var link = event.target.closest ? event.target.closest('a[href]') : null;
-    if (!link) return;
-
-    var raw = (link.getAttribute('href') || '').trim();
-    var href = raw.toLowerCase();
-    var isWhatsapp =
-      href.indexOf('wa.me/') !== -1 ||
-      href.indexOf('api.whatsapp.com/') !== -1 ||
-      href.indexOf('web.whatsapp.com/') !== -1 ||
-      href.indexOf('whatsapp:') === 0;
-
-    if (!isWhatsapp || typeof window.gtag !== 'function') return;
-
-    window.gtag('event', 'ads_conversion_contact', {
-      contact_method: 'whatsapp',
-      link_url: link.href || raw,
-      transport_type: 'beacon'
-    });
-  }, true);
-})();
-</script>
-<!-- /GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->
-'''
+          block = (
+              '\n\n<!-- GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->\n'
+              '<script id="gy-whatsapp-conversion-v1">\n'
+              '(function(){\n'
+              "  'use strict';\n"
+              '  if (window.__gyWhatsappConversionV1) return;\n'
+              '  window.__gyWhatsappConversionV1 = true;\n\n'
+              "  document.addEventListener('click', function(event){\n"
+              "    var link = event.target.closest ? event.target.closest('a[href]') : null;\n"
+              '    if (!link) return;\n\n'
+              "    var raw = (link.getAttribute('href') || '').trim();\n"
+              '    var href = raw.toLowerCase();\n'
+              '    var isWhatsapp =\n'
+              "      href.indexOf('wa.me/') !== -1 ||\n"
+              "      href.indexOf('api.whatsapp.com/') !== -1 ||\n"
+              "      href.indexOf('web.whatsapp.com/') !== -1 ||\n"
+              "      href.indexOf('whatsapp:') === 0;\n\n"
+              "    if (!isWhatsapp || typeof window.gtag !== 'function') return;\n\n"
+              "    window.gtag('event', 'ads_conversion_contact', {\n"
+              "      contact_method: 'whatsapp',\n"
+              '      link_url: link.href || raw,\n'
+              "      transport_type: 'beacon'\n"
+              '    });\n'
+              '  }, true);\n'
+              '})();\n'
+              '</script>\n'
+              '<!-- /GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->\n'
+          )
 
           s = s[:pos] + block + s[pos:]
           path.write_text(s, encoding='utf-8')
