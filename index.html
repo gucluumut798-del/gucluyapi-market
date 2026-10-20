@@ -3139,6 +3139,38 @@ footer{background:linear-gradient(180deg,#182230,#21324a)!important}
   gtag('config', 'G-NQMQZ571DX');
 </script>
 <!-- /GÜÇLÜ YAPI GA4 ONLY -->
+
+<!-- GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->
+<script id="gy-whatsapp-conversion-v1">
+(function(){
+  'use strict';
+  if (window.__gyWhatsappConversionV1) return;
+  window.__gyWhatsappConversionV1 = true;
+
+  document.addEventListener('click', function(event){
+    var link = event.target.closest ? event.target.closest('a[href]') : null;
+    if (!link) return;
+
+    var raw = (link.getAttribute('href') || '').trim();
+    var href = raw.toLowerCase();
+    var isWhatsapp =
+      href.indexOf('wa.me/') !== -1 ||
+      href.indexOf('api.whatsapp.com/') !== -1 ||
+      href.indexOf('web.whatsapp.com/') !== -1 ||
+      href.indexOf('whatsapp:') === 0;
+
+    if (!isWhatsapp || typeof window.gtag !== 'function') return;
+
+    window.gtag('event', 'ads_conversion_contact', {
+      contact_method: 'whatsapp',
+      link_url: link.href || raw,
+      transport_type: 'beacon'
+    });
+  }, true);
+})();
+</script>
+<!-- /GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->
+
 <div class="scroll-progress" id="scrollProgress"></div>
 <div aria-hidden="true" class="bg-particles"><span></span><span></span><span></span><span></span><span></span></div>
 <div aria-label="Güçlü Yapı açılış ekranı" class="gy-launch" id="loader">
