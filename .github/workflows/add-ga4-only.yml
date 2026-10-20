@@ -1,4 +1,4 @@
-name: Switch GA4 Stream
+name: Add WhatsApp Conversion Tracking
 
 on:
   push:
@@ -9,60 +9,87 @@ permissions:
   contents: write
 
 jobs:
-  switch-ga4:
+  add-contact-conversion:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Replace only GA4 stream ID
+      - name: Add only WhatsApp GA4 conversion event
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
 
           path = Path('index.html')
           s = path.read_text(encoding='utf-8', errors='ignore')
 
-          old_id = 'G-52E1LMP010'
-          new_id = 'G-NQMQZ571DX'
+          ga_id = 'G-NQMQZ571DX'
+          ga_end = '<!-- /GÜÇLÜ YAPI GA4 ONLY -->'
+          marker = '<!-- GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->'
 
-          block_re = re.compile(
-              r'<!-- GÜÇLÜ YAPI GA4 ONLY -->.*?<!-- /GÜÇLÜ YAPI GA4 ONLY -->',
-              re.S
-          )
-          m = block_re.search(s)
-          if not m:
-              raise SystemExit('ERROR: canonical GA4 block not found; refusing to modify anything else.')
+          if ga_id not in s:
+              raise SystemExit('ERROR: new GA4 stream is not present; refusing to modify site.')
 
-          block = m.group(0)
-          if old_id not in block:
-              if new_id in block:
-                  print('New GA4 stream ID already installed; no change needed.')
-                  raise SystemExit(0)
-              raise SystemExit('ERROR: expected old GA4 ID not found in canonical block; refusing broad changes.')
+          if marker in s:
+              print('WhatsApp conversion tracker already exists; no change needed.')
+              raise SystemExit(0)
 
-          new_block = block.replace(old_id, new_id)
-          updated = s[:m.start()] + new_block + s[m.end():]
-          path.write_text(updated, encoding='utf-8')
-          print('GA4 stream switched inside canonical block only.')
+          pos = s.find(ga_end)
+          if pos == -1:
+              raise SystemExit('ERROR: canonical GA4 end marker not found; refusing broad changes.')
+          pos += len(ga_end)
+
+          block = r'''
+
+<!-- GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->
+<script id="gy-whatsapp-conversion-v1">
+(function(){
+  'use strict';
+  if (window.__gyWhatsappConversionV1) return;
+  window.__gyWhatsappConversionV1 = true;
+
+  document.addEventListener('click', function(event){
+    var link = event.target.closest ? event.target.closest('a[href]') : null;
+    if (!link) return;
+
+    var raw = (link.getAttribute('href') || '').trim();
+    var href = raw.toLowerCase();
+    var isWhatsapp =
+      href.indexOf('wa.me/') !== -1 ||
+      href.indexOf('api.whatsapp.com/') !== -1 ||
+      href.indexOf('web.whatsapp.com/') !== -1 ||
+      href.indexOf('whatsapp:') === 0;
+
+    if (!isWhatsapp || typeof window.gtag !== 'function') return;
+
+    window.gtag('event', 'ads_conversion_contact', {
+      contact_method: 'whatsapp',
+      link_url: link.href || raw,
+      transport_type: 'beacon'
+    });
+  }, true);
+})();
+</script>
+<!-- /GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->
+'''
+
+          s = s[:pos] + block + s[pos:]
+          path.write_text(s, encoding='utf-8')
+          print('WhatsApp conversion event tracker inserted after the canonical GA4 block only.')
           PY
 
-      - name: Verify new GA4 tag
+      - name: Verify conversion tracker
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
           s = Path('index.html').read_text(encoding='utf-8', errors='ignore')
-          m = re.search(r'<!-- GÜÇLÜ YAPI GA4 ONLY -->.*?<!-- /GÜÇLÜ YAPI GA4 ONLY -->', s, re.S)
-          assert m, 'GA4 block missing'
-          block = m.group(0)
-          assert 'googletagmanager.com/gtag/js?id=G-NQMQZ571DX' in block
-          assert "gtag('config', 'G-NQMQZ571DX')" in block
-          assert 'G-52E1LMP010' not in block
-          print('New GA4 stream verification passed.')
+          assert 'G-NQMQZ571DX' in s
+          assert '<!-- GÜÇLÜ YAPI WHATSAPP CONVERSION V1 -->' in s
+          assert "gtag('event', 'ads_conversion_contact'" in s
+          assert "contact_method: 'whatsapp'" in s
+          print('WhatsApp conversion tracker verification passed.')
           PY
 
       - name: Commit index only if changed
@@ -74,6 +101,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No site change needed"
           else
-            git commit -m "Switch GA4 to G-NQMQZ571DX"
+            git commit -m "Track WhatsApp clicks as ads_conversion_contact"
             git push
           fi
