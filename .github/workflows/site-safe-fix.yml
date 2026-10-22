@@ -1,0 +1,116 @@
+name: Safe site audit and repair
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/site-safe-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply safe fixes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path('index.html')
+          html = p.read_text(encoding='utf-8')
+          original = html
+
+          # 1) Remove a visible standalone "}" only when it is outside script/style blocks.
+          lines = html.splitlines(True)
+          out = []
+          in_script = False
+          in_style = False
+          for line in lines:
+              low = line.lower()
+              if '<script' in low:
+                  in_script = True
+              if '<style' in low:
+                  in_style = True
+              if line.strip() == '}' and not in_script and not in_style:
+                  continue
+              out.append(line)
+              if '</script>' in low:
+                  in_script = False
+              if '</style>' in low:
+                  in_style = False
+          html = ''.join(out)
+
+          # 2) Protect links opened in a new tab against opener access.
+          def secure_blank(match):
+              tag = match.group(0)
+              if re.search(r'\brel\s*=', tag, re.I):
+                  return tag
+              return tag[:-1] + ' rel="noopener noreferrer">'
+          html = re.sub(r'<a\b[^>]*\btarget=["\']_blank["\'][^>]*>', secure_blank, html, flags=re.I)
+
+          # 3) Keep the verified GA4 measurement ID. Replace only the known retired ID if it survived anywhere.
+          html = html.replace('G-52E1LMP010', 'G-NQMQZ571DX')
+
+          # 4) Basic document essentials, only if absent.
+          if not re.search(r'<html\b[^>]*\blang=', html, re.I):
+              html = re.sub(r'<html\b([^>]*)>', r'<html\1 lang="tr">', html, count=1, flags=re.I)
+          if not re.search(r'<link\b[^>]*\brel=["\']canonical["\']', html, re.I):
+              html = re.sub(r'</head>', '<link rel="canonical" href="https://gucluyapimarket.com/"/>\n</head>', html, count=1, flags=re.I)
+          if not re.search(r'<meta\b[^>]*\bname=["\']viewport["\']', html, re.I):
+              html = re.sub(r'</head>', '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>\n</head>', html, count=1, flags=re.I)
+
+          # Sanity checks: do not commit if a structural marker was accidentally broken.
+          checks = {
+              'doctype': '<!DOCTYPE html>' in html or '<!doctype html>' in html.lower(),
+              'html-close': '</html>' in html.lower(),
+              'body-close': '</body>' in html.lower(),
+              'ga4': 'G-NQMQZ571DX' in html,
+              'whatsapp-conversion': 'ads_conversion_contact' in html,
+          }
+          bad = [k for k,v in checks.items() if not v]
+          if bad:
+              raise SystemExit('Safety check failed: ' + ', '.join(bad))
+
+          if html != original:
+              p.write_text(html, encoding='utf-8')
+              print('index.html: safe fixes applied')
+          else:
+              print('index.html: no safe fixes needed')
+
+          Path('robots.txt').write_text(
+              'User-agent: *\nAllow: /\n\nSitemap: https://gucluyapimarket.com/sitemap.xml\n',
+              encoding='utf-8'
+          )
+          Path('sitemap.xml').write_text(
+              '<?xml version="1.0" encoding="UTF-8"?>\n'
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+              '  <url>\n'
+              '    <loc>https://gucluyapimarket.com/</loc>\n'
+              '    <lastmod>2026-10-22</lastmod>\n'
+              '    <changefreq>weekly</changefreq>\n'
+              '    <priority>1.0</priority>\n'
+              '  </url>\n'
+              '</urlset>\n',
+              encoding='utf-8'
+          )
+          PY
+
+      - name: Commit repairs
+        shell: bash
+        run: |
+          if git diff --quiet -- index.html robots.txt sitemap.xml; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html robots.txt sitemap.xml
+          git commit -m "Repair site safety, SEO and crawl files"
+          git push
