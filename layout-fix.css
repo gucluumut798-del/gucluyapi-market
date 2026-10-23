@@ -1,7 +1,0 @@
-/* GÜÇLÜ YAPI — güvenli düzeltme
-   Önceki agresif genişlik kuralları kaldırıldı.
-   Mevcut tasarım ve ölçüler index.html tarafından yönetilir. */
-
-*,*::before,*::after{box-sizing:border-box}
-html,body{max-width:100%;overflow-x:hidden}
-img,video,svg{max-width:100%;height:auto}
