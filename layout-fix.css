@@ -1,0 +1,146 @@
+/* GÜÇLÜ YAPI — güvenli yerleşim düzeltmesi
+   Mevcut tasarımı değiştirmez; sadece genişlik, taşma ve responsive ölçüleri toparlar. */
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{width:100%;max-width:100%;overflow-x:hidden}
+body{margin:0}
+
+/* Sayfayı dar bir masaüstü kutusuna hapseden eski sınırları kaldır */
+main,.site-main,.page-shell,.site-shell,.page-wrapper,.site-wrapper{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+main>section{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+/* Üst menü: büyük ekranı daha iyi kullan ama kenara yapışmasın */
+header .nav{
+  width:min(1440px,calc(100% - 56px))!important;
+  max-width:1440px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+header nav{gap:10px!important}
+header nav a{white-space:nowrap}
+
+/* Hero: arka plan tam genişlik, içerik dengeli ve okunabilir */
+.hero{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  min-height:680px!important;
+  height:auto!important;
+  overflow:hidden!important;
+}
+.hero-inner{
+  width:min(1440px,calc(100% - 56px))!important;
+  max-width:1440px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  padding:54px 24px 62px!important;
+  gap:46px!important;
+  align-items:center!important;
+  grid-template-columns:minmax(0,1.35fr) minmax(340px,.65fr)!important;
+}
+.hero-inner>div:first-child{
+  min-width:0!important;
+  max-width:840px!important;
+}
+.hero h1{
+  max-width:820px!important;
+  font-size:clamp(46px,4.45vw,74px)!important;
+  line-height:.96!important;
+  letter-spacing:-2px!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.hero p{max-width:760px!important}
+.hero-card{
+  width:100%!important;
+  max-width:430px!important;
+  justify-self:end!important;
+  margin-left:auto!important;
+}
+
+/* Alt bölümlerde de masaüstü alanını düzgün kullan */
+.section-inner,.section-wrap,.section-content,
+.service-grid,.service-grid-v2,.services-grid,
+.project-grid,.projects-grid,.projects-grid-v2,
+.brand-grid,.brands-grid,.process-grid,.reference-grid,.references-grid,
+.before-after-grid,.gallery-grid{
+  width:min(1440px,calc(100% - 56px))!important;
+  max-width:1440px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+section{scroll-margin-top:110px}
+
+/* Geniş ekranlarda kenarlarda dev boşluk oluşmasını engelle */
+@media (min-width:1500px){
+  header .nav,.hero-inner,
+  .section-inner,.section-wrap,.section-content,
+  .service-grid,.service-grid-v2,.services-grid,
+  .project-grid,.projects-grid,.projects-grid-v2,
+  .brand-grid,.brands-grid,.process-grid,.reference-grid,.references-grid,
+  .before-after-grid,.gallery-grid{
+    width:min(1480px,calc(100% - 72px))!important;
+    max-width:1480px!important;
+  }
+}
+
+/* Tablet */
+@media (max-width:1100px){
+  header .nav,.hero-inner{
+    width:calc(100% - 32px)!important;
+  }
+  .hero{
+    min-height:auto!important;
+  }
+  .hero-inner{
+    padding:44px 12px 52px!important;
+    gap:28px!important;
+    grid-template-columns:minmax(0,1fr) minmax(300px,.72fr)!important;
+  }
+  .hero h1{
+    font-size:clamp(42px,6vw,62px)!important;
+    letter-spacing:-1.5px!important;
+  }
+  .hero-card{max-width:380px!important}
+}
+
+/* Mobil */
+@media (max-width:760px){
+  header .nav{
+    width:calc(100% - 20px)!important;
+  }
+  .hero-inner{
+    width:calc(100% - 20px)!important;
+    padding:34px 4px 44px!important;
+    display:block!important;
+  }
+  .hero h1{
+    max-width:100%!important;
+    font-size:clamp(38px,11vw,54px)!important;
+    line-height:1!important;
+    letter-spacing:-1.2px!important;
+  }
+  .hero p{max-width:100%!important}
+  .hero-card{
+    max-width:100%!important;
+    margin:28px 0 0!important;
+  }
+  .section-inner,.section-wrap,.section-content,
+  .service-grid,.service-grid-v2,.services-grid,
+  .project-grid,.projects-grid,.projects-grid-v2,
+  .brand-grid,.brands-grid,.process-grid,.reference-grid,.references-grid,
+  .before-after-grid,.gallery-grid{
+    width:calc(100% - 20px)!important;
+  }
+}
